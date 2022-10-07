@@ -1,7 +1,7 @@
 <template>
   <a-layout>
     <a-layout-header>
-      <GraphBoard :days="getDaysOfTheYear()" :contributions="getContributionsByYear()" @handleSelectedDate="handleSelectedDate" />
+      <GraphBoard :days="getDaysOfTheYear()" :contributions="getContributionsByYear()" @handleSelectedDate="handleSelectedDate" :selectedYear="selectedYear" />
     </a-layout-header>
     <a-layout>
       <a-layout-content>
@@ -54,22 +54,29 @@ export default {
       const result = this.jsonData.filter(
         (contribution) => getYear(parseISO(contribution.created_at)) === this.selectedYear
       );
-      console.log("🚀 ~ file: App.vue ~ line 59 ~ getContributionsByYear ~ result", result)
       return result;
     },
     handleChangeSelectedYear(year) {
-      return this.selectedYear = year;
+      this.selectedYear = year;
+      const newDate = new Date(new Date(year, 11, 31));
+      this.selectedDate = newDate;
+      this.filterContributions();
     },
     handleSelectedDate(date) {
-      console.log("🚀 ~ file: App.vue ~ line 64 ~ handleSelectedDate ~ date", date)
       return this.selectedDate = date;
     },
     filterContributions() {
       const filteredContributions = this.jsonData.filter(
         (contribution) => format(new Date(contribution.created_at), 'yyyy-MM-dd') === format(this.selectedDate, 'yyyy-MM-dd')
       );
-      console.log("🚀 ~ file: App.vue ~ line 71 ~ filterContributions ~ filteredContributions", filteredContributions)
-      return this.contributionsByDate = filteredContributions;
+
+      return this.contributionsByDate = this.groupByKey(filteredContributions, 'type');
+    },
+    groupByKey(array, key) {
+      return array.reduce((acc, curr) => {
+        (acc[curr[key]] = acc[curr[key]] || []).push(curr);
+        return acc;
+      }, {})
     }
   }
 }

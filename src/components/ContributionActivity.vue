@@ -7,10 +7,10 @@
     </div>
     <p v-if="!contributions.length" class="no-activity-text">No activity during this period.</p>
     <a-timeline>
-      <a-timeline-item color="gray" v-for="contr of contributions" :key="contr">
-        <p class="title">Create {{contr.type}} in 1 repository</p>
-        <div class="contribution-item">
-          <a :href="contr.url">{{contr.actor}}/{{contr.repository_name}} <span>1 {{contr.type}}</span></a>
+      <a-timeline-item color="gray" v-for="contr in contributions" :key="contr">
+        <p class="title">Create {{contr.length}} {{contr[0].type}} in 1 repository</p>
+        <div class="contribution-item" v-for="activity in contr" :key="activity">
+          <a :href="activity.url">{{activity.actor}}/{{activity.repository_name}} <span>1 {{activity.type}}</span></a>
         </div>
       </a-timeline-item>
     </a-timeline>
@@ -23,13 +23,12 @@ import { format } from 'date-fns';
   export default {
     name: 'ContributionActivity',
     props: {
-      contributions: Array,
+      contributions: Object,
       selectedDate: Date,
       selectedYear: Number,
     },
     methods: {
       formatDate() {
-        console.log("🚀 ~ file: ContributionActivity.vue ~ line 32 ~ formatDate ~ this.selectDate", this.selectedDate)
         return this.selectedDate ? format(this.selectedDate, 'LLLL d, yyyy') : null;
       }
     }
@@ -56,7 +55,7 @@ import { format } from 'date-fns';
   }
 
   .contribution-timeline .top-section .line {
-    width: 85%;
+    width: 80%;
     border-top: 1px solid var(--font-primary);
   }
 

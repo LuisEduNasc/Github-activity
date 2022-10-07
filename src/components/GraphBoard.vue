@@ -1,7 +1,7 @@
 <template>
   <div class="header-section">
     <div>
-      <p>{{contributions.length}} contributions in the last year</p>
+      <p>{{contributions.length}} contributions in {{selectedYear}}</p>
     </div>
     <div class="graph-container">
       <div class="graph">
@@ -131,6 +131,7 @@ export default {
   props: {
     days: Array,
     contributions: Array,
+    selectedYear: Number,
   },
   methods: {
     filterWeekday(weekday) {
