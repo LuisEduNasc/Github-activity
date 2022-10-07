@@ -1,21 +1,25 @@
 <template>
   <section class="contribution-timeline">
     <p>Contribution activity</p>
-    <div class="top-section">
-      <p class="selected-date">{{formatDate() || selectedYear}}</p>
-      <div class="line"></div>
+    <div
+      class="block-date"
+    >
+      <div class="top-section">
+        <p class="selected-date">{{formatDate()}}</p>
+        <div class="line"></div>
+      </div>
+      <p v-if="!Object.keys(contributions).length" class="no-activity-text">No activity during this period.</p>
+      <a-timeline>
+        <a-timeline-item color="gray" v-for="contr in contributions" :key="contr">
+          <p class="title">
+            Create {{contr.length}} {{contr[0].type}} in {{Object.keys(groupByKey(contr, 'repository_name')).length}} repository
+          </p>
+          <div class="contribution-item" v-for="activity in contr" :key="activity">
+            <a :href="activity.url">{{activity.actor}}/{{activity.repository_name}} <span>1 {{activity.type}}</span></a>
+          </div>
+        </a-timeline-item>
+      </a-timeline>
     </div>
-    <p v-if="!Object.keys(contributions).length" class="no-activity-text">No activity during this period.</p>
-    <a-timeline>
-      <a-timeline-item color="gray" v-for="contr in contributions" :key="contr">
-        <p class="title">
-          Create {{contr.length}} {{contr[0].type}} in {{Object.keys(groupByKey(contr, 'repository_name')).length}} repository
-        </p>
-        <div class="contribution-item" v-for="activity in contr" :key="activity">
-          <a :href="activity.url">{{activity.actor}}/{{activity.repository_name}} <span>1 {{activity.type}}</span></a>
-        </div>
-      </a-timeline-item>
-    </a-timeline>
   </section>
 </template>
 
@@ -32,7 +36,7 @@ import { format } from 'date-fns';
     },
     methods: {
       formatDate() {
-        return this.selectedDate ? format(this.selectedDate, 'LLLL d, yyyy') : null;
+        return this.selectedDate ? format(this.selectedDate, 'LLLL d, yyyy') : this.selectedYear;
       }
     }
   }

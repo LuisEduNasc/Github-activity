@@ -293,6 +293,10 @@ export default {
     cursor: pointer;
   }
 
+  .header-section .graph-container .graph button:hover {
+    transform: scale(1.2);
+  }
+
   .header-section .graph-container .graph button[class$="-0"] {
     background-color: var(--inactivity-color);
   }

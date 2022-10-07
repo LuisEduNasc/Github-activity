@@ -29,6 +29,7 @@
 
 <script>
 import {eachDayOfInterval, format, getYear, parseISO} from 'date-fns'
+
 import GraphBoard from './components/GraphBoard.vue'
 import ContributionActivity from './components/ContributionActivity.vue'
 import YearList from './components/YearList.vue'
@@ -49,10 +50,8 @@ export default {
       contributionsByDate: []
     }
   },
-  watch: {
-    selectedDate() {
-      this.filterContributions();
-    }
+  mounted() {
+    this.filterContributions(this.selectedYear);
   },
   methods: {
     getDaysOfTheYear() {
@@ -71,17 +70,25 @@ export default {
     },
     handleChangeSelectedYear(year) {
       this.selectedYear = year;
-      const newDate = new Date(new Date(year, 11, 31));
-      this.selectedDate = newDate;
-      this.filterContributions();
+      this.selectedDate = null;
+      this.filterContributions(year);
     },
     handleSelectedDate(date) {
-      return this.selectedDate = date;
+      this.selectedDate = date;
+      this.filterContributions();
     },
-    filterContributions() {
-      const filteredContributions = this.jsonData.filter(
-        (contribution) => format(new Date(contribution.created_at), 'yyyy-MM-dd') === format(this.selectedDate, 'yyyy-MM-dd')
-      );
+    filterContributions(year) {
+      let filteredContributions;
+
+      if (!year && this.selectedDate) {
+        filteredContributions = this.jsonData.filter(
+          (contribution) => format(new Date(contribution.created_at), 'yyyy-MM-dd') === format(this.selectedDate, 'yyyy-MM-dd')
+        );
+      } else {
+        filteredContributions = this.jsonData.filter(
+          (contribution) => format(new Date(contribution.created_at), 'yyyy') == (year || this.selectedYear)
+        );
+      }
 
       return this.contributionsByDate = this.groupByKey(filteredContributions, 'type');
     },
@@ -90,7 +97,7 @@ export default {
         (acc[curr[key]] = acc[curr[key]] || []).push(curr);
         return acc;
       }, {})
-    }
+    },
   }
 }
 </script>
