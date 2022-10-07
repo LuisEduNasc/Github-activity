@@ -5,7 +5,7 @@
       <p class="selected-date">{{formatDate() || selectedYear}}</p>
       <div class="line"></div>
     </div>
-    <p v-if="!contributions.length" class="no-activity-text">No activity during this period.</p>
+    <p v-if="!Object.keys(contributions).length" class="no-activity-text">No activity during this period.</p>
     <a-timeline>
       <a-timeline-item color="gray" v-for="contr in contributions" :key="contr">
         <p class="title">
