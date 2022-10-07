@@ -1,14 +1,27 @@
 <template>
   <a-layout>
     <a-layout-header>
-      <GraphBoard :days="getDaysOfTheYear()" :contributions="getContributionsByYear()" @handleSelectedDate="handleSelectedDate" :selectedYear="selectedYear" />
+      <GraphBoard
+        :days="getDaysOfTheYear()"
+        :contributions="getContributionsByYear()"
+        @handleSelectedDate="handleSelectedDate"
+        :selectedYear="selectedYear"
+      />
     </a-layout-header>
     <a-layout>
       <a-layout-content>
-        <ContributionActivity :contributions="contributionsByDate" :selectedDate="selectedDate" :selectedYear="selectedYear"/>
+        <ContributionActivity
+          :contributions="contributionsByDate"
+          :selectedDate="selectedDate"
+          :selectedYear="selectedYear"
+          :groupByKey="groupByKey"
+        />
       </a-layout-content>
       <a-layout-sider>
-        <YearList :selectedYear="selectedYear" :handleChangeSelectedYear="handleChangeSelectedYear" />
+        <YearList
+          :selectedYear="selectedYear"
+          :handleChangeSelectedYear="handleChangeSelectedYear"
+        />
       </a-layout-sider>
     </a-layout>
   </a-layout>

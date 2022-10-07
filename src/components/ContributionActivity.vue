@@ -8,7 +8,9 @@
     <p v-if="!contributions.length" class="no-activity-text">No activity during this period.</p>
     <a-timeline>
       <a-timeline-item color="gray" v-for="contr in contributions" :key="contr">
-        <p class="title">Create {{contr.length}} {{contr[0].type}} in 1 repository</p>
+        <p class="title">
+          Create {{contr.length}} {{contr[0].type}} in {{Object.keys(groupByKey(contr, 'repository_name')).length}} repository
+        </p>
         <div class="contribution-item" v-for="activity in contr" :key="activity">
           <a :href="activity.url">{{activity.actor}}/{{activity.repository_name}} <span>1 {{activity.type}}</span></a>
         </div>
@@ -26,6 +28,7 @@ import { format } from 'date-fns';
       contributions: Object,
       selectedDate: Date,
       selectedYear: Number,
+      groupByKey: Function
     },
     methods: {
       formatDate() {
